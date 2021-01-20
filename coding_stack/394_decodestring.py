@@ -74,8 +74,3 @@ class Solution:
             return res
         return dfs(s,0)
 
-作者：jyd
-链接：https://leetcode-cn.com/problems/decode-string/solution/decode-string-fu-zhu-zhan-fa-di-gui-fa-by-jyd/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
