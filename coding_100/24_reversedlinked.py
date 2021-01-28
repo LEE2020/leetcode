@@ -23,12 +23,11 @@ class Solution(object):
     def reverseList(self, head):
         if not head or not head.next:
             return head 
-        tmp = None
-        pre = ListNone(-1)
-        while head and head.next:
-            tmp = head.next
-            head.next = pre
-            pre = head
-            head = tmp 
-
-        return pre.next 
+        cur = head
+        pre = None
+        while cur:
+            tmp = cur.next
+            cur.next = pre 
+            pre = cur 
+            cur = tmp 
+        return pre 
