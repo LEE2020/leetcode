@@ -23,6 +23,32 @@
 链接：https://leetcode-cn.com/problems/longest-increasing-subsequence
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 '''
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        # dp[i][j] 的值代表 nums的起始位置，和终止位置 
+        """
+        if len(nums) < 2:
+            return len(nums)
+        dp = [[ [] for _ in range(len(nums))   ] for _ in range(len(nums))]
+        for i in range(len(nums)):
+            for j in range(len(nums)):
+                if i == j:
+                    
+                    dp[i][j].append(nums[i])
+        
+        for ind in range(len(nums)):
+            for ind2 in range(ind+1,len(nums)):
+                if nums[ind2] > dp[ind][ind2-1]:
+                    dp[ind][ind2] = dp[ind][ind2].append(nums[ind2])
+                else:
+                    dp[ind][ind2] = dp[ind][ind2-1]
+        return dp 
+
+                
+
 
 class Solution(object):
     def lengthOfLIS(self, nums):
@@ -38,7 +64,7 @@ class Solution(object):
         for ind in range(len(nums)):
             for  ind2 in range(ind):
                 if nums[ind] > nums[ind2]:
-                    dp[ind] = max(dp[ind],dp[ind2]+1)
+                    dp[ind] = max(dp[ind],dp[ind2]+1) # 当前ind 序列  和ind之前的任意序列长度，进行比较 ， 将最大的赋值给当前dp[ind]
         return max(dp )
 
 
