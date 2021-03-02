@@ -17,7 +17,8 @@
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/combination-sum-iii
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-# 深拷贝 path[:]
+# 浅拷贝 path[:] ， reference to path's copy()
+path 
 
 '''
 class Solution(object):
@@ -38,7 +39,7 @@ class Solution(object):
             if k == 0:
                 if residue ==0:
                     
-                    res.append(path[:])
+                    res.append(path[:]) # 需要进行浅拷贝，这时的path已经清空 
                     #print(path,path[:])
                     return 
                 return 
@@ -46,7 +47,7 @@ class Solution(object):
                 path.append(ind) 
                 helper(k-1,residue - ind,ind+ 1 , path)
                 #print(k,residue,path,res)
-                path.pop()
+                path.pop()  # 影响path值 
         global res
         res = [] 
         helper(k,n,1,path)

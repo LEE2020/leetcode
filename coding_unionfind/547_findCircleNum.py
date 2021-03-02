@@ -22,53 +22,84 @@
 # 方法 1 bfs / dfs 
 # 方法3 不带路径压缩的 union-find 
 # 方法4 带路径压缩的 union-find
-class UnionFind(object):
-    def __init__(self,tmp_list ):
-        self.father = dict()
-        for ind in tmp_list:
-            self.father[ind] = None  # 初始化时，本身的ID为cluster ID    
-    def find(self,x):
-        root = x 
-        while root != None:
-            root = self.father[root]
-        return root # 返回该节点的最根部的节点（一个集合的头头）        
-        
-    def find_pathCompress(self,x): 
-        root = x
-        while root != None:
-            root = self.father[root]
-        # 路径压缩, 这条路径上的点，都指向根结点
-        father  = x 
-        while x  != root: 
-            tmp_father = self.father[x] 
-            self.father[x] = root 
-            x = tmp_father  
-        return root     
-    def merge(self,x,y):
-        x_root = self.find(x)
-        y_root = self.find(y)
-        if x_root != y_root:        
-            self.father[x] = y_root 
-
             
-    
 
- 
-class Solution(object):
-    def findCircleNum(self,isConnected):
-        tmp_list = [t for t in range(len(isConnected))] 
-        uf = UnionFind(tmp_list)
-        for i_pro in range(len(isConnected)):
-            for j_pro in range(i_pro):
-                if isConnected[i_pro][j_pro] == 1:
-                    uf.merge(i_pro,j_pro)
+class UnionFind:
+    def __init__(self,n):
+        self.father = {key: key for key in range(n)}
+        # 额外记录集合的数量
+        # self.num_of_sets = 0
+    
+    def find(self,x):
+        return self.father[x]
+        """
+        root = x
+        while self.father[root] != None:
+            root = self.father[root]
         
-        return len(set(uf.father.values())) # 作为头头的数量 
+        while x != root:
+            original_father = self.father[x]
+            self.father[x] = root
+            x = original_father
+        
+        return root
+        """
+    
+    def union(self,x,y):
+        _x = self.find(x)
+        _y = self.find(y)
+        # 路径压缩
+        if _x != _y:
+            for ind in self.father:
+                if self.father[ind] == _x :
+                    self.father[ind] = _y 
+
+        """
+        root_x,root_y = self.find(x),self.find(y)
+        
+        if root_x != root_y:
+            self.father[root_x] = root_y
+            # 集合的数量-1
+            self.num_of_sets -= 1
+        """
+    """
+    def add(self,x):
+        if x not in self.father:
+            self.father[x] = None
+            # 集合的数量+1
+            self.num_of_sets += 1
+
+    """
+
+class Solution(object):
+    def findCircleNum(self, isConnected):
+        """
+        :type isConnected: List[List[int]]
+        :rtype: int
+        """
+        n = len(isConnected)
+        uf = UnionFind(n)
+        for i in range(len(isConnected)):
+            for j in range(len(isConnected)):
+                if isConnected[i][j]:
+                    uf.union(i,j)
+        
+        return len(set(uf.father.values())) 
 
     def findCircleNum(self, isConnected):
-        """ bfs search for finding connected provinces 
+        """ bfs search for finding connected provinces
+            当bfs需要用到层级时，才必须用nextlevel 区别开来；
+            否则 直接append到queue中就好。
+            而且，用简单的stack就好了。后入后出。
+
+
+
+            一般建议用 collections.deque 
+            queue = collections.deque()
+            queue.appendleft()
+            queue.pop() 
         """
-        circles = 0
+        clusters = 0
         visited = set()
         n = len(isConnected) # provinces numbers 
         queen = [] 
